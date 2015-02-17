@@ -52,6 +52,9 @@
             (local-set-key (kbd "M-SPC") 'jedi:complete)
             (local-set-key (kbd "M-.") 'jedi:goto-definition)))
 
+;; Attempt to use C-d for copy current line
+;; TODO: revert cursor to initial position
+(global-set-key "\C-c\C-d" "\C-a\C- \C-n\M-w\C-y")
 
 (defun revert-all-buffers ()
   "Refreshes all open buffers from their respective files"
