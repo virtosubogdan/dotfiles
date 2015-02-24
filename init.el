@@ -18,6 +18,10 @@
 (add-to-list 'package-archives
 	     '("marmalade" . "http://marmalade-repo.org/packages/") t)
 
+;; Cloned from https://github.com/jaypei/emacs-neotree.git
+(add-to-list 'load-path "~/Tools/emacsTools/neotree")
+(require 'neotree)
+(global-set-key [f8] 'neotree-toggle)
 
 (defun install-if-needed (package)
   (unless (package-installed-p package)
