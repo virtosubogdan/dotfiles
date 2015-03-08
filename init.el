@@ -4,12 +4,17 @@
 (setq auto-mode-alist (cons '("emacs" . lisp-mode) auto-mode-alist))
 (ido-mode 1)
 (show-paren-mode 1)
-(tool-bar-mode 1)
-(menu-bar-mode 1)
+(tool-bar-mode 0)
+(menu-bar-mode 0)
 (scroll-bar-mode -1)
 (column-number-mode 1)
 (global-linum-mode t)
+;; Delete selected region
+(delete-selection-mode 1)
 (setq-default show-trailing-whitespace t)
+;; Disable splash screen
+(setq inhibit-splash-screen t)
+
 ;; Prerequisite: Emacs >= 24
 (require 'package)
 (package-initialize)
