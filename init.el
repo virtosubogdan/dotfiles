@@ -43,7 +43,7 @@
 
 ;; make more packages available with the package installer
 (setq to-install
-      '(exec-path-from-shell less-css-mode markdown-mode zenburn-theme jedi smartparens yaml-mode flycheck))
+      '(highlight-symbol exec-path-from-shell less-css-mode markdown-mode zenburn-theme jedi smartparens yaml-mode flycheck))
 
 (when (memq window-system '(mac ns))
   (exec-path-from-shell-initialize))
@@ -96,17 +96,3 @@ Don't mess with special buffers."
   (dolist (buffer (buffer-list))
     (unless (or (eql buffer (current-buffer)) (not (buffer-file-name buffer)))
       (kill-buffer buffer))))
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(package-selected-packages
-   (quote
-    (highlight-symbol zenburn-theme yaml-mode smartparens markdown-mode less-css-mode jedi flycheck exec-path-from-shell))))
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- )
