@@ -28,6 +28,14 @@
 (require 'neotree)
 (global-set-key [f8] 'neotree-toggle)
 
+(require 'highlight-symbol)
+(global-set-key (kbd "M-.") 'highlight-symbol-at-point)
+(global-set-key (kbd "M-,") 'highlight-symbol-next)
+
+;; Rebind undo
+(global-unset-key [(control z)])
+(global-set-key [(control z)] 'undo)
+
 (defun install-if-needed (package)
   (unless (package-installed-p package)
     (package-refresh-contents)
@@ -59,7 +67,8 @@
             (jedi:ac-setup)
             (local-set-key "\C-cd" 'jedi:show-doc)
             (local-set-key (kbd "M-SPC") 'jedi:complete)
-            (local-set-key (kbd "M-.") 'jedi:goto-definition)))
+            (local-set-key (kbd "M-/") 'jedi:goto-definition))
+	  )
 
 ;; Attempt to use C-d for copy current line
 ;; TODO: revert cursor to initial position
@@ -87,3 +96,17 @@ Don't mess with special buffers."
   (dolist (buffer (buffer-list))
     (unless (or (eql buffer (current-buffer)) (not (buffer-file-name buffer)))
       (kill-buffer buffer))))
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(package-selected-packages
+   (quote
+    (highlight-symbol zenburn-theme yaml-mode smartparens markdown-mode less-css-mode jedi flycheck exec-path-from-shell))))
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )
