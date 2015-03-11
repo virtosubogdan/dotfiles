@@ -37,6 +37,8 @@
 (global-set-key [(control z)] 'undo)
 
 (defun install-if-needed (package)
+  "Install package only if needed.
+\(PACKAGE) is the package that will be installed"
   (unless (package-installed-p package)
     (package-refresh-contents)
     (package-install package)))
@@ -75,7 +77,7 @@
 (global-set-key "\C-c\C-d" "\C-a\C- \C-n\M-w\C-y")
 
 (defun revert-all-buffers ()
-  "Refreshes all open buffers from their respective files"
+  "Refreshes all open buffers from their respective files."
   (interactive)
   (let* ((list (buffer-list))
          (buffer (car list)))
@@ -96,3 +98,8 @@ Don't mess with special buffers."
   (dolist (buffer (buffer-list))
     (unless (or (eql buffer (current-buffer)) (not (buffer-file-name buffer)))
       (kill-buffer buffer))))
+
+(server-start)
+
+(provide 'init)
+;;; init.el ends here
