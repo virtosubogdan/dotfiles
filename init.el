@@ -101,5 +101,14 @@ Don't mess with special buffers."
 
 (server-start)
 
+;; Python macros
+
+(define-key
+  python-mode-map
+  (kbd "C-c C-x i")
+  (lambda ()
+    (interactive)
+    (insert "import ipdb;ipdb.set_trace()")))
+
 (provide 'init)
 ;;; init.el ends here
