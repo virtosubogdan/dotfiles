@@ -3,4 +3,8 @@ Evaluate all the Emacs Lisp expressions in the buffer.
 
 M-x server-start, or put the expression (server-start) in your init file.
 
+C-g
+Quits current command
 
+F1 k
+Describes the following key combination. Useful when binding keys.
