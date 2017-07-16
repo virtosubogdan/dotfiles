@@ -21,13 +21,13 @@
 
 ;; Prerequisite: Emacs >= 24
 (require 'package)
-(package-initialize)
 (add-to-list 'package-archives
 	     '("melpa" . "http://melpa.milkbox.net/packages/"))
 (add-to-list 'package-archives
 	     '("marmalade" . "http://marmalade-repo.org/packages/") t)
+(package-initialize)
 
-;; Cloned from https://github.com/jaypei/emacs-neotree.git
+;; Cloned from https://github.com/jaypei/emacs-neotree.git. You need to do this manually
 (add-to-list 'load-path "~/Tools/emacsTools/neotree")
 (require 'neotree)
 (global-set-key [f8] 'neotree-toggle)
@@ -48,8 +48,9 @@
     (package-install package)))
 
 ;; make more packages available with the package installer
+;; jedi requires special attention. Run M-x jedi:install-server when you remember this anyway to late and after you read this comment.
 (setq to-install
-      '(highlight-symbol exec-path-from-shell less-css-mode markdown-mode zenburn-theme jedi smartparens yaml-mode flycheck))
+      '(highlight-symbol exec-path-from-shell less-css-mode markdown-mode zenburn-theme jedi smartparens yaml-mode flycheck python-mode))
 
 (when (memq window-system '(mac ns))
   (exec-path-from-shell-initialize))
@@ -67,6 +68,7 @@
 
 (add-hook 'after-init-hook #'global-flycheck-mode)
 
+(require 'python-mode)
 (add-hook 'python-mode-hook
           (lambda ()
             (jedi:setup)
@@ -116,3 +118,17 @@ Don't mess with special buffers."
 
 (provide 'init)
 ;;; init.el ends here
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(package-selected-packages
+   (quote
+    (python-mode zenburn-theme yaml-mode smartparens markdown-mode less-css-mode jedi highlight-symbol flycheck exec-path-from-shell))))
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )
