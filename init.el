@@ -9,6 +9,10 @@
 (scroll-bar-mode -1)
 (column-number-mode 1)
 (global-linum-mode t)
+(setq frame-title-format
+      '((:eval (if (buffer-file-name)
+                   (abbreviate-file-name (buffer-file-name))
+                 "%b"))))
 ;; Delete selected region
 (delete-selection-mode 1)
 (setq-default show-trailing-whitespace t)
