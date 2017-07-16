@@ -50,13 +50,29 @@
 ;; make more packages available with the package installer
 ;; jedi requires special attention. Run M-x jedi:install-server when you remember this anyway to late and after you read this comment.
 (setq to-install
-      '(highlight-symbol exec-path-from-shell less-css-mode markdown-mode zenburn-theme jedi smartparens yaml-mode flycheck python-mode))
+      '(highlight-symbol exec-path-from-shell less-css-mode markdown-mode zenburn-theme jedi smartparens yaml-mode flycheck python-mode web-mode magit js2-mode json-mode))
 
 (when (memq window-system '(mac ns))
   (exec-path-from-shell-initialize))
 
 (add-to-list 'auto-mode-alist '("\\.html?\\'" . web-mode))
+(add-to-list 'auto-mode-alist '("\\.js$" . web-mode))
+(add-to-list 'auto-mode-alist '("\\.jsx$" . web-mode))
+
 (add-to-list 'auto-mode-alist '("\\.sls?\\'" . yaml-mode))
+
+
+(defadvice web-mode-highlight-part (around tweak-jsx activate)
+  (if (equal web-mode-content-type "jsx")
+      (let ((web-mode-enable-part-face nil))
+        ad-do-it)
+    ad-do-it))
+
+;; web mode stuff
+(setq web-mode-markup-indent-offset 4)
+(setq web-mode-css-indent-offset 4)
+(setq web-mode-code-indent-offset 4)
+(setq-default indent-tabs-mode nil)
 
 (mapc 'install-if-needed to-install)
 ;; (require 'yasnippet)
@@ -66,16 +82,48 @@
 ;; (yas/initialize)
 ;; (yas/load-directory "~/.emacs.d/snippets/")
 
+;; http://www.flycheck.org/manual/latest/index.html
+(require 'flycheck)
+
 (add-hook 'after-init-hook #'global-flycheck-mode)
 
 (require 'python-mode)
+;; disable jshint since we prefer eslint checking
+(setq-default flycheck-disabled-checkers
+              (append flycheck-disabled-checkers
+                      '(javascript-jshint)))
+
+;; use eslint with web-mode for jsx files
+(flycheck-add-mode 'javascript-eslint 'web-mode)
+
+;; customize flycheck temp file prefix
+(setq-default flycheck-temp-prefix ".flycheck")
+
+;; disable json-jsonlist checking for json files
+(setq-default flycheck-disabled-checkers
+  (append flycheck-disabled-checkers
+          '(json-jsonlist)))
+
+;; for better jsx syntax-highlighting in web-mode
+;; - courtesy of Patrick @halbtuerke
+(defadvice web-mode-highlight-part (around tweak-jsx activate)
+  (if (equal web-mode-content-type "jsx")
+    (let ((web-mode-enable-part-face nil))
+      ad-do-it)
+    ad-do-it))
+
+
 (add-hook 'python-mode-hook
           (lambda ()
             (jedi:setup)
             (jedi:ac-setup)
             (local-set-key "\C-cd" 'jedi:show-doc)
             (local-set-key (kbd "M-SPC") 'jedi:complete)
-            (local-set-key (kbd "M-/") 'jedi:goto-definition))
+            (local-set-key (kbd "M-/") 'jedi:goto-definition)
+	    (local-set-key (kbd "C-c i") 'insert-ipdb)
+	    (hs-minor-mode)
+	    (local-set-key (kbd "M-]") 'hs-show-block)
+	    (local-set-key (kbd "M-[") 'hs-hide-block))
 	  )
 
 ;; Attempt to use C-d for copy current line
@@ -109,12 +157,14 @@ Don't mess with special buffers."
 
 ;; Python macros
 
-(define-key
-  python-mode-map
-  (kbd "C-c C-x i")
-  (lambda ()
+(defun insert-ipdb()
+  "Insert an ipdb breakpoint."
     (interactive)
-    (insert "import ipdb;ipdb.set_trace()")))
+    (insert "import ipdb;ipdb.set_trace() # pylint: disable=C0321"))
+
+(setq frame-title-format
+      (list (format "%s %%S: %%j " (system-name))
+        '(buffer-file-name "%f" (dired-directory dired-directory "%b"))))
 
 (provide 'init)
 ;;; init.el ends here
@@ -125,10 +175,11 @@ Don't mess with special buffers."
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
    (quote
-    (python-mode zenburn-theme yaml-mode smartparens markdown-mode less-css-mode jedi highlight-symbol flycheck exec-path-from-shell))))
+    (python-mode js2-mode web-mode-jshint magit zenburn-theme yaml-mode web-mode smartparens markdown-mode less-css-mode jedi highlight-symbol flycheck exec-path-from-shell))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  )
+(put 'dired-find-alternate-file 'disabled nil)
